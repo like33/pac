@@ -132,24 +132,21 @@ def cron(file_name, content_size, mdict):
 
         speed = format_bytes_num(speed_num)
         data_bytes_formated = format_bytes_num(data_bytes)
-        persent = data_bytes / content_size * 100  # 当前下载百分比
-        done_block = '█' * int(persent // 2)  # 共显示50块，故以2除百作五十，计为所下载的显示块数
+        persent = data_bytes / content_size * 100
+        done_block = '█' * int(persent // 2)
         print(
             f"\r {file_name} ----> [{done_block:50}] {persent:.2f}%   {speed}/s   {data_bytes_formated}/{content_size_formated}",
             end=" ")
-
-        # 收到信号时退出
-        if mdict['exit']: break
-
-        # 消磨剩余时间
+        if mdict['exit']:
+            break
         time_now = time.time()
         sleep_time = time_prev + interval - time_now
         if sleep_time > 0:
             time.sleep(sleep_time)
-            time_now = time.time()  # 避免误差
+            time_now = time.time()
 
 
-def format_bytes_num(bytes_num):  # 格式化为合适的数值大小与单位
+def format_bytes_num(bytes_num):
     i = 0
     while bytes_num > 1024 and i < 9 - 1:
         bytes_num /= 1024
